@@ -1,0 +1,76 @@
+{
+ "text": "Der Hund. Die rote Rose. Der Ball ist unter dem Tisch. Haus, Maus. Super! Das hast du toll gemacht!",
+ "note": "Erzeugt mit Piper (natives Programm), Tempo 1.15 (etwas langsamer). Im Browser entsteht dieselbe Qualität.",
+ "samples": [
+  {
+   "file": "thorsten-medium.mp3",
+   "label": "Thorsten – mittel (CC0)",
+   "seconds": 10.9
+  },
+  {
+   "file": "thorsten-high.mp3",
+   "label": "Thorsten – hoch (CC0)",
+   "seconds": 9.8
+  },
+  {
+   "file": "kerstin-medium.mp3",
+   "label": "Kerstin – mittel (CC0)",
+   "seconds": 12.1
+  },
+  {
+   "file": "kerstin-low.mp3",
+   "label": "Kerstin – niedrig (CC0)",
+   "seconds": 9.9
+  },
+  {
+   "file": "eva_k-x_low.mp3",
+   "label": "Eva K – sehr klein",
+   "seconds": 12.9
+  },
+  {
+   "file": "ramona-low.mp3",
+   "label": "Ramona – niedrig",
+   "seconds": 9.9
+  },
+  {
+   "file": "pavoque-low.mp3",
+   "label": "Pavoque – niedrig",
+   "seconds": 11.4
+  },
+  {
+   "file": "karlsson-low.mp3",
+   "label": "Karlsson – niedrig",
+   "seconds": 10.2
+  },
+  {
+   "file": "thorsten-emotional-neutral.mp3",
+   "label": "Thorsten emotional – neutral (CC0)",
+   "seconds": 8.8
+  },
+  {
+   "file": "thorsten-emotional-amused.mp3",
+   "label": "Thorsten emotional – amüsiert (CC0)",
+   "seconds": 8.9
+  },
+  {
+   "file": "thorsten-emotional-surprised.mp3",
+   "label": "Thorsten emotional – überrascht (CC0)",
+   "seconds": 9.9
+  },
+  {
+   "file": "mls-speaker-3.mp3",
+   "label": "MLS – Sprecher*in 3",
+   "seconds": 18.5
+  },
+  {
+   "file": "mls-speaker-42.mp3",
+   "label": "MLS – Sprecher*in 42",
+   "seconds": 24.1
+  },
+  {
+   "file": "mls-speaker-120.mp3",
+   "label": "MLS – Sprecher*in 120",
+   "seconds": 18.2
+  }
+ ]
+}

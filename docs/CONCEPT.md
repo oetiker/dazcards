@@ -131,6 +131,18 @@ always type an explicit key in the card editor, and the explicit key wins.
 Import keeps ids, so re-importing an updated set **replaces** the old version
 instead of duplicating it.
 
+## Neural TTS (evaluation)
+
+`src/lib/piper.ts` runs Piper voices fully in the browser: espeak-ng phonemizer
+(WASM, ~18 MB data, from `@diffusionstudio/piper-wasm`) + ONNX Runtime Web
+(WASM, ~12 MB) + a Piper voice model (20–114 MB from Hugging Face, cached in
+Cache Storage). The runtimes are copied from `node_modules` at build time
+(`scripts/copy-tts-vendor.mjs`). Measured in headless Chromium (1 thread):
+~4.5 s to load a voice, ~0.4 s to generate a 2 s sentence. The page
+`tts-lab.html` compares all German voices (pre-rendered samples) and tests live
+generation on the device. Candidate voices with free licences: Thorsten
+(male, CC0), Kerstin (female, CC0), Thorsten emotional (CC0, 8 moods).
+
 ## Open points / next steps
 
 - Per-deck recordings of articles ("der", "die", "das") and plural forms.

@@ -50,6 +50,10 @@ export default defineConfig({
       workbox: {
         // Precache everything, including the bundled pictures, so the app works fully offline.
         globPatterns: ['**/*.{js,css,html,svg,png,ico,webmanifest}'],
+        // Keep the voice lab (large WASM files, samples) out of the app's offline cache,
+        // and do not answer its URL with the app shell.
+        globIgnores: ['**/tts-lab/**', 'tts-lab.html', '**/lab-*.js', '**/lab-*.css'],
+        navigateFallbackDenylist: [/tts-lab/],
         cleanupOutdatedCaches: true,
       },
     }),
@@ -64,6 +68,10 @@ export default defineConfig({
   },
   envPrefix: ['VITE_', 'TAURI_ENV_*'],
   build: {
+    rollupOptions: {
+      // The voice lab is a separate page (not part of the app or its offline cache).
+      input: { main: 'index.html', lab: 'tts-lab.html' },
+    },
     target: process.env.TAURI_ENV_PLATFORM === 'windows' ? 'chrome105' : 'safari15',
     minify: !process.env.TAURI_ENV_DEBUG ? 'esbuild' : false,
     sourcemap: !!process.env.TAURI_ENV_DEBUG,

@@ -28,6 +28,9 @@ Notes for iOS:
   (Settings → Accessibility → Spoken Content → Voices → German).
 - Export opens the share sheet → *Save to Files* / AirDrop / Mail.
 
+Voice lab (compare German Piper voices, test in-browser neural TTS):
+**https://oetiker.github.io/dazcards/tts-lab.html**
+
 Deployment happens automatically via `.github/workflows/pages.yml` on every push:
 it builds the app and publishes it to the `gh-pages` branch, which GitHub Pages serves.
 
