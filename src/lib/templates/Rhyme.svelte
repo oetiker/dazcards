@@ -17,4 +17,4 @@
   }
 </script>
 
-<ChoiceRounds {rounds} {deck} showPrompt={true} {onfinish} afterCorrect={sayPair} />
+<ChoiceRounds {rounds} {deck} promptMode="card" withArticle={false} {onfinish} afterCorrect={sayPair} />

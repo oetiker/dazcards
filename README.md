@@ -34,10 +34,12 @@ it builds the app and publishes it to the `gh-pages` branch, which GitHub Pages 
 ## Features (v0.1)
 
 - **Child profiles** – several children on one tablet, each with an animal and colour
-- **Game templates**: *Entdecken* (explore), *Finde es* (find it), *Reime* (rhymes)
+- **14 game templates**: Entdecken, Finde es, Ballone, Memory, Puzzle, Nachsprechen,
+  Der/die/das, Eins oder viele, Sortieren, Was gehört nicht dazu?, Reime,
+  Was reimt sich nicht?, Anlaut, Silben klatschen (see [docs/CONCEPT.md](docs/CONCEPT.md))
 - **Positive-only feedback** – stars, chimes, praise; no failure states
 - **Card editor** for adults: own photo or bundled picture, record the word with the
-  microphone or load an audio file, optional article / plural / category / rhyme / syllables
+  microphone or load an audio file, optional article / plural / category / rhyme / first sound / syllables
 - **Game editor**: template + card set + number of pictures and rounds
 - Starter set "Erste Wörter" with 23 words and many rhyme pairs
 - **JSON export/import** of everything (media embedded), or of single card sets

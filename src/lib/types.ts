@@ -23,8 +23,10 @@ export interface Card {
    * e.g. "aus" for Haus/Maus. Suggested automatically, editable by adults.
    */
   rhyme?: string;
-  /** Number of syllables, for clapping games. */
+  /** Number of syllables, for clapping games. Estimated from spelling if empty. */
   syllables?: number;
+  /** First sound (Anlaut), e.g. "sch" for Stein. Derived from spelling if empty. */
+  onset?: string;
 }
 
 /** A themed collection of cards in one language. */

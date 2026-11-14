@@ -9,4 +9,4 @@
   const rounds = findItRounds(cards, game.options.choices, game.options.rounds);
 </script>
 
-<ChoiceRounds {rounds} {deck} showPrompt={false} {onfinish} />
+<ChoiceRounds {rounds} {deck} promptMode="speaker" {onfinish} />

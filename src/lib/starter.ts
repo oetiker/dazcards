@@ -1,6 +1,6 @@
 // Bundled starter content, seeded on first launch. Images: Twemoji (CC BY 4.0),
 // see ASSETS.md. No recordings are bundled; TTS is used until adults record words.
-import { getMeta, putCard, putDeck, putGame, putMedia, setMeta } from './db';
+import { getDeck, getMeta, putCard, putDeck, putGame, putMedia, setMeta } from './db';
 import type { Article, Card } from './types';
 import { libraryBlob } from './library';
 
@@ -34,24 +34,63 @@ const STARTER: Entry[] = [
 
 const DECK_ID = 'starter-erste-woerter';
 
-export async function seedIfEmpty(): Promise<void> {
-  if (await getMeta<boolean>('seeded')) return;
-  await putDeck({
-    id: DECK_ID,
-    name: 'Erste Wörter',
-    lang: 'de-CH',
-    builtin: true,
-    createdAt: Date.now(),
-    coverImageId: 'starter-img-haus',
-  });
-  for (const [file, word, article, plural, category] of STARTER) {
-    const imageId = await putMedia('image', await libraryBlob(file), `starter-img-${file}`);
-    const card: Card = { id: `starter-${file}`, deckId: DECK_ID, word, article, plural, category, imageId };
-    await putCard(card);
+type StarterGame = [id: string, name: string, templateId: string, choices: number, rounds: number];
+
+/** Starter games. Each seed version lists the games it introduced. */
+const STARTER_GAMES: StarterGame[][] = [
+  // v1
+  [
+    ['starter-explore', 'Entdecken', 'explore', 6, 1],
+    ['starter-find', 'Finde es', 'find-it', 3, 8],
+    ['starter-rhyme', 'Reime', 'rhyme', 3, 6],
+  ],
+  // v2
+  [
+    ['starter-bubbles', 'Ballone', 'bubbles', 4, 8],
+    ['starter-memory', 'Memory', 'memory', 4, 1],
+    ['starter-puzzle', 'Puzzle', 'puzzle', 4, 4],
+    ['starter-repeat', 'Nachsprechen', 'repeat', 1, 6],
+    ['starter-articles', 'Der, die, das', 'articles', 3, 8],
+    ['starter-plural', 'Eins oder viele', 'plural', 2, 8],
+    ['starter-sort', 'Sortieren', 'sort', 2, 8],
+    ['starter-odd-category', 'Was gehört nicht dazu?', 'odd-category', 4, 6],
+    ['starter-odd-rhyme', 'Was reimt sich nicht?', 'odd-rhyme', 3, 6],
+    ['starter-first-sound', 'Anlaut', 'first-sound', 3, 6],
+    ['starter-syllables', 'Silben klatschen', 'syllables', 1, 6],
+  ],
+];
+const SEED_VERSION = STARTER_GAMES.length;
+
+async function addStarterGames(fromVersion: number): Promise<void> {
+  let t = Date.now();
+  for (const games of STARTER_GAMES.slice(fromVersion)) {
+    for (const [id, name, templateId, choices, rounds] of games) {
+      await putGame({ id, name, templateId, deckId: DECK_ID, options: { choices, rounds }, createdAt: t++ });
+    }
   }
-  const now = Date.now();
-  await putGame({ id: 'starter-explore', name: 'Entdecken', templateId: 'explore', deckId: DECK_ID, options: { choices: 6, rounds: 1 }, createdAt: now });
-  await putGame({ id: 'starter-find', name: 'Finde es', templateId: 'find-it', deckId: DECK_ID, options: { choices: 3, rounds: 8 }, createdAt: now + 1 });
-  await putGame({ id: 'starter-rhyme', name: 'Reime', templateId: 'rhyme', deckId: DECK_ID, options: { choices: 3, rounds: 6 }, createdAt: now + 2 });
+}
+
+export async function seedIfEmpty(): Promise<void> {
+  const version = (await getMeta<number>('seedVersion')) ?? ((await getMeta<boolean>('seeded')) ? 1 : 0);
+  if (version >= SEED_VERSION) return;
+  if (version === 0) {
+    await putDeck({
+      id: DECK_ID,
+      name: 'Erste Wörter',
+      lang: 'de-CH',
+      builtin: true,
+      createdAt: Date.now(),
+      coverImageId: 'starter-img-haus',
+    });
+    for (const [file, word, article, plural, category] of STARTER) {
+      const imageId = await putMedia('image', await libraryBlob(file), `starter-img-${file}`);
+      const card: Card = { id: `starter-${file}`, deckId: DECK_ID, word, article, plural, category, imageId };
+      await putCard(card);
+    }
+  }
+  // Existing installs get the games added by newer versions – but only if the
+  // starter deck still exists (adults may have deleted it on purpose).
+  if (version === 0 || (await getDeck(DECK_ID))) await addStarterGames(version);
   await setMeta('seeded', true);
+  await setMeta('seedVersion', SEED_VERSION);
 }

@@ -51,26 +51,42 @@ Profile 1─n PlayRecord (gameId, stars)
 
 ## Game templates
 
-Implemented:
+All templates are implemented (`src/lib/templates/`). Each one checks whether a
+card set is playable and explains to adults what is missing.
 
-| id | Name | How it plays | Needs |
+| id | Name | How it plays | Uses |
 |---|---|---|---|
-| `explore` | Entdecken | Tap any picture to hear it; celebrate when all were heard | ≥1 card with image |
-| `find-it` | Finde es | Hear a word, tap the matching picture (2–6 choices) | ≥2 cards with image |
-| `rhyme` | Reime | See + hear a word, tap the picture that rhymes | ≥1 rhyme pair |
+| `explore` | Entdecken | Tap any picture to hear it; celebrate when all were heard | – |
+| `find-it` | Finde es | Hear a word, tap the matching picture | – |
+| `bubbles` | Ballone | Balloons with pictures float up; pop the one that was named | – |
+| `memory` | Memory | Find pairs; every turned card says its word | – |
+| `puzzle` | Puzzle | Drag pieces onto a board with a faint ghost picture; word at the end | – |
+| `repeat` | Nachsprechen | Hear the word, record yourself, hear yourself and the model | microphone |
+| `articles` | Der, die, das | Hear "der Hund", tap the blue/red/green house | article |
+| `plural` | Eins oder viele | Hear "der Hund" or "die Hunde", tap one or many | plural |
+| `sort` | Sortieren | Sort pictures into baskets; each basket shows an example picture | category |
+| `odd-category` | Was gehört nicht dazu? | All pictures are named; tap the one from another category | category |
+| `rhyme` | Reime | See + hear a word, tap the picture that rhymes | rhyme* |
+| `odd-rhyme` | Was reimt sich nicht? | "Haus, Maus, Ball": tap the one that does not rhyme | rhyme* |
+| `first-sound` | Anlaut | Find the picture that starts with the same sound (Maus – Mund) | onset* |
+| `syllables` | Silben klatschen | Tap the drum once per syllable; the app claps along if needed | syllables* |
 
-Planned candidates (each is one Svelte component plus a registry entry):
+\* derived from the spelling when the field is empty (`rhyme.ts`, `phonology.ts`).
 
-- **Memory** – turn over pairs (picture–picture, later picture–sound)
-- **Der/Die/Das** – drag pictures into blue/red/green houses (uses `article`)
-- **Sort** – drag pictures into category baskets (uses `category`)
-- **Odd one out** – which one does not belong / does not rhyme
-- **Clap the syllables** – tap a drum once per syllable (uses `syllables`)
-- **First sound** – which pictures start with /m/? (needs an `onset` field)
-- **One / many** – singular vs plural pictures (uses `plural`; needs plural images or duplication)
-- **Puzzle** – assemble a picture, then hear the word
-- **Bubble pop** – tap the bubble with the named picture
-- **Repeat after me** – the child records themselves and hears both versions
+Design notes per template:
+
+- **No hidden answers on screen.** For example, the syllable game shows only
+  the claps made, never empty slots that would reveal the count.
+- **Wrong is never "wrong".** Sorting bins wiggle; memory cards turn back;
+  puzzle pieces float back; the syllable game claps it out and lets the child
+  try once more, then moves on with praise.
+- **Grammar audio:** recordings contain the bare word. Games that need the
+  article or plural ("der Hund", "die Hunde") speak those parts with TTS.
+  Possible improvement: per-deck recordings of "der/die/das" so no TTS is needed.
+- **Colours for articles** follow the common DaZ convention: der = blue,
+  die = red, das = green.
+- **Nachsprechen** does no speech scoring; saying the word out loud and hearing
+  oneself is the exercise. Without a microphone it degrades to a listening game.
 
 ### Adding a template
 
@@ -106,6 +122,8 @@ Import keeps ids, so re-importing an updated set **replaces** the old version
 instead of duplicating it.
 
 ## Open points / next steps
+
+- Per-deck recordings of articles ("der", "die", "das") and plural forms.
 
 - Real device testing on Android and iOS (microphone permission, file save
   dialog with `content://` URIs on Android, TTS voice availability).

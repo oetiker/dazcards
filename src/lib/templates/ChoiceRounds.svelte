@@ -9,46 +9,70 @@
   import CardImage from '../components/CardImage.svelte';
   import SpeakButton from '../components/SpeakButton.svelte';
   import Progress from '../components/Progress.svelte';
-  import { chime, praise, sayCard, stopAll } from '../audio';
+  import { chime, praise, sayCard, stopAll, wait } from '../audio';
   import type { Round } from '../rounds';
   import type { Card, Deck } from '../types';
+
+  type TileState = 'correct' | 'nudge' | 'dim' | 'active';
 
   let {
     rounds,
     deck,
-    showPrompt,
+    promptMode,
+    introduce = false,
+    withArticle = true,
     onfinish,
     afterCorrect,
   }: {
     rounds: Round[];
     deck: Deck;
-    /** Show the prompt card's picture (rhyme) or only a speaker button (find it). */
-    showPrompt: boolean;
+    /** 'speaker': only hear the prompt; 'card': see and hear it; 'none': no prompt (odd one out). */
+    promptMode: 'speaker' | 'card' | 'none';
+    /** Name every option in turn at the start of each round. */
+    introduce?: boolean;
+    /** Speak nouns with their article ("der Hund"). Off for sound games (rhymes, first sounds). */
+    withArticle?: boolean;
     onfinish: (stars: number) => void;
     afterCorrect?: (r: Round) => Promise<void>;
   } = $props();
 
   let index = $state(0);
-  let states = $state<Record<string, 'correct' | 'nudge' | 'dim'>>({});
+  let states = $state<Record<string, TileState | undefined>>({});
   let busy = $state(false);
+  let asking = 0; // invalidates an intro that is still running when the child taps
   const round = $derived(rounds[index]);
   const cols = $derived(round ? (round.options.length === 4 ? 2 : Math.min(3, round.options.length)) : 3);
 
-  const ask = () => round && sayCard(round.prompt, deck.lang, true);
-  const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  async function ask() {
+    if (!round) return;
+    const token = ++asking;
+    if (promptMode !== 'none') await sayCard(round.prompt, deck.lang, withArticle);
+    if (!introduce) return;
+    for (const o of round.options) {
+      if (token !== asking) return;
+      states = { ...states, [o.id]: 'active' };
+      await sayCard(o, deck.lang, withArticle);
+      states = { ...states, [o.id]: undefined };
+      await wait(150);
+    }
+  }
 
   onMount(() => {
     setTimeout(ask, 400);
-    return stopAll;
+    return () => {
+      asking++;
+      stopAll();
+    };
   });
 
   async function tap(card: Card) {
     if (busy || !round) return;
+    asking++; // stop a running introduction
     if (card.id === round.answer.id) {
       busy = true;
       states = Object.fromEntries(round.options.map((o) => [o.id, o.id === card.id ? 'correct' : 'dim']));
       chime();
-      await (afterCorrect ? afterCorrect(round) : sayCard(card, deck.lang, true));
+      await (afterCorrect ? afterCorrect(round) : sayCard(card, deck.lang, withArticle));
       await praise();
       await wait(500);
       states = {};
@@ -61,13 +85,14 @@
         ask();
       }
     } else {
-      states = { ...states, [card.id]: 'nudge' };
+      states = { [card.id]: 'nudge' };
       busy = true;
-      await sayCard(card, deck.lang, true);
-      states = { ...states, [card.id]: undefined as never };
+      await sayCard(card, deck.lang, withArticle);
+      states = {};
       busy = false;
       await wait(250);
-      ask();
+      // After a wrong guess, only repeat the prompt – not the whole introduction.
+      if (promptMode !== 'none') sayCard(round.prompt, deck.lang, withArticle);
     }
   }
 </script>
@@ -76,12 +101,12 @@
   <div class="game">
     <Progress done={index} total={rounds.length} />
     <div class="prompt">
-      {#if showPrompt}
+      {#if promptMode === 'card'}
         <button class="prompt-card" onclick={ask} aria-label="Nochmals hören">
           <CardImage card={round.prompt} />
         </button>
       {/if}
-      <SpeakButton big={!showPrompt} onclick={ask} />
+      <SpeakButton big={promptMode === 'speaker'} onclick={ask} />
     </div>
     <div class="options" style:--cols={cols}>
       {#each round.options as card (card.id + index)}

@@ -6,6 +6,7 @@
   import { LIBRARY, libraryBlob, libraryUrl } from '../../lib/library';
   import { sayCard } from '../../lib/audio';
   import { suggestRhyme } from '../../lib/rhyme';
+  import { estimateSyllables, suggestOnset } from '../../lib/phonology';
   import Recorder from '../../lib/components/Recorder.svelte';
   import type { Article, Card, Deck } from '../../lib/types';
 
@@ -77,6 +78,8 @@
   }
 
   const rhymeSuggestion = $derived(suggestRhyme(draft.word));
+  const onsetSuggestion = $derived(draft.word.trim() ? suggestOnset(draft.word) : '');
+  const syllableSuggestion = $derived(draft.word.trim() ? estimateSyllables(draft.word) : 0);
   const canSave = $derived(draft.word.trim().length > 0 && (!!newImage || !!original.imageId));
 
   async function save() {
@@ -97,7 +100,7 @@
       c.audioId = newAudio ? await putMedia('audio', newAudio) : undefined;
     }
     // Drop empty optional fields so exports stay tidy.
-    for (const k of ['article', 'plural', 'category', 'rhyme'] as const) if (!c[k]) delete c[k];
+    for (const k of ['article', 'plural', 'category', 'rhyme', 'onset'] as const) if (!c[k]) delete c[k];
     if (!c.syllables) delete c.syllables;
     await putCard(c);
     onclose();
@@ -156,7 +159,7 @@
         {/if}
       </div>
 
-      <details open={!!(original.article || original.plural || original.category || original.rhyme || original.syllables)}>
+      <details open={!!(original.article || original.plural || original.category || original.rhyme || original.syllables || original.onset)}>
         <summary>Grammatik &amp; Laute (optional)</summary>
         <div class="grid2">
           <label>
@@ -172,7 +175,20 @@
             Reim
             <input bind:value={draft.rhyme} placeholder={rhymeSuggestion ? `automatisch: ${rhymeSuggestion}` : ''} />
           </label>
-          <label>Silben <input type="number" min="1" max="8" bind:value={draft.syllables} /></label>
+          <label>
+            Anlaut
+            <input bind:value={draft.onset} placeholder={onsetSuggestion ? `automatisch: ${onsetSuggestion}` : ''} />
+          </label>
+          <label>
+            Silben
+            <input
+              type="number"
+              min="1"
+              max="8"
+              bind:value={draft.syllables}
+              placeholder={syllableSuggestion ? `automatisch: ${syllableSuggestion}` : ''}
+            />
+          </label>
         </div>
       </details>
     </div>

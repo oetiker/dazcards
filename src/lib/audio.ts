@@ -105,6 +105,24 @@ export async function sayCard(card: Card, lang: string, withArticle = false): Pr
   return speak(text, lang);
 }
 
+/**
+ * Word with article for grammar games. Recordings contain only the bare word,
+ * so with a recording the article is spoken by TTS first.
+ */
+export async function sayWithArticle(card: Card, lang: string): Promise<void> {
+  if (!card.article) return sayCard(card, lang);
+  if (!card.audioId) return speak(`${card.article} ${card.word}`, lang);
+  await speak(card.article, lang);
+  return sayCard(card, lang);
+}
+
+/** "die Hunde" – plural forms always use TTS (only the singular is recorded). */
+export function sayPlural(card: Card, lang: string): Promise<void> {
+  return speak(`die ${card.plural ?? card.word}`, lang);
+}
+
+export const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
 const PRAISE = ['Super!', 'Toll!', 'Prima!', 'Bravo!', 'Genau!', 'Sehr gut!', 'Juhu!'];
 
 export function praise(): Promise<void> {
@@ -183,6 +201,45 @@ export function chime(): void {
     [523, 659, 784].forEach((f, i) => tone(f, i * 0.09, 0.35));
   } catch {
     /* audio not available – silently skip */
+  }
+}
+
+/** A soft drum hit for clapping syllables. */
+export function drum(): void {
+  try {
+    ctx ??= new AudioContext();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    const t = ctx.currentTime;
+    o.type = 'sine';
+    o.frequency.setValueAtTime(180, t);
+    o.frequency.exponentialRampToValueAtTime(60, t + 0.25);
+    g.gain.setValueAtTime(0.5, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    o.connect(g).connect(ctx.destination);
+    o.start(t);
+    o.stop(t + 0.3);
+  } catch {
+    /* ignore */
+  }
+}
+
+/** A balloon pop. */
+export function pop(): void {
+  try {
+    ctx ??= new AudioContext();
+    const len = Math.floor(ctx.sampleRate * 0.08);
+    const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len) ** 3;
+    const src = ctx.createBufferSource();
+    const g = ctx.createGain();
+    g.gain.value = 0.4;
+    src.buffer = buf;
+    src.connect(g).connect(ctx.destination);
+    src.start();
+  } catch {
+    /* ignore */
   }
 }
 

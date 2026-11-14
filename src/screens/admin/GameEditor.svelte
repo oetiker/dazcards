@@ -74,9 +74,10 @@
       <div class="templates">
         {#each templates as t (t.id)}
           <button class="template" class:active={game.templateId === t.id} onclick={() => chooseTemplate(t.id)}>
-            <img src={t.icon} alt="" />
+            <img src={t.icon} alt="" style:background={t.color} />
             <strong>{t.name}</strong>
             <span>{t.description}</span>
+            {#if t.needs}<span class="needs">Nutzt: {t.needs}</span>{/if}
           </button>
         {/each}
       </div>
@@ -89,16 +90,18 @@
       <h2>3. Einstellungen</h2>
       <div class="form">
         <label>Name (für Erwachsene) <input bind:value={game.name} placeholder="automatisch" /></label>
-        {#if template?.uses.choices}
+        {#if template?.options.choices}
+          {@const o = template.options.choices}
           <label>
-            Bilder pro Runde: <strong>{game.options.choices}</strong>
-            <input type="range" min="2" max="6" bind:value={game.options.choices} />
+            {o.label}: <strong>{game.options.choices}</strong>
+            <input type="range" min={o.min} max={o.max} bind:value={game.options.choices} />
           </label>
         {/if}
-        {#if template?.uses.rounds}
+        {#if template?.options.rounds}
+          {@const o = template.options.rounds}
           <label>
-            Runden: <strong>{game.options.rounds}</strong>
-            <input type="range" min="3" max="20" bind:value={game.options.rounds} />
+            {o.label}: <strong>{game.options.rounds}</strong>
+            <input type="range" min={o.min} max={o.max} bind:value={game.options.rounds} />
           </label>
         {/if}
       </div>
@@ -121,8 +124,9 @@
     background: var(--card); border: 3px solid transparent; border-radius: 16px; padding: 0.9rem;
   }
   .template.active { border-color: var(--accent); }
-  .template img { width: 48px; }
+  .template img { width: 48px; padding: 6px; border-radius: 12px; box-sizing: border-box; }
   .template span { font-size: 0.85rem; color: var(--muted); }
+  .template .needs { font-size: 0.75rem; font-style: italic; }
   .actions { display: flex; gap: 0.5rem; margin-top: 2rem; }
   .spacer { flex: 1; }
 </style>

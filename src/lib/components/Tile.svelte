@@ -8,7 +8,7 @@
     card,
     state = 'idle',
     onclick,
-  }: { card: Card; state?: 'idle' | 'correct' | 'nudge' | 'dim'; onclick?: () => void } = $props();
+  }: { card: Card; state?: 'idle' | 'correct' | 'nudge' | 'dim' | 'active'; onclick?: () => void } = $props();
 </script>
 
 <button class="tile {state}" {onclick} aria-label={card.word}>
@@ -44,6 +44,10 @@
   }
   .dim {
     opacity: 0.35;
+  }
+  .active {
+    transform: scale(1.06);
+    outline: 6px solid var(--accent);
   }
   .star {
     position: absolute;
