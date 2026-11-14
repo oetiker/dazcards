@@ -6,9 +6,10 @@
   import { getTemplate } from '../../lib/templates';
   import { buildExport, importData, saveTextFile } from '../../lib/exchange';
   import { newId } from '../../lib/id';
+  import SoundTest from './SoundTest.svelte';
   import type { Deck, Game, Profile } from '../../lib/types';
 
-  type Tab = 'games' | 'decks' | 'profiles' | 'data';
+  type Tab = 'games' | 'decks' | 'profiles' | 'data' | 'sound';
   let tab = $state<Tab>((sessionStorage.getItem('adminTab') as Tab) || 'games');
   $effect(() => sessionStorage.setItem('adminTab', tab));
 
@@ -31,10 +32,10 @@
     counts = c;
     games = (await listGames())
       .sort((a, b) => a.createdAt - b.createdAt)
-      .map((g) => ({
-        ...g,
-        problem: getTemplate(g.templateId)?.check(cardsByDeck.get(g.deckId) ?? []) ?? 'Unbekannte Vorlage',
-      }));
+      .map((g) => {
+        const t = getTemplate(g.templateId);
+        return { ...g, problem: t ? t.check(cardsByDeck.get(g.deckId) ?? []) : 'Unbekannte Spielvorlage' };
+      });
     profiles = (await listProfiles()).sort((a, b) => a.createdAt - b.createdAt);
   }
   onMount(load);
@@ -74,6 +75,7 @@
     <button class:active={tab === 'decks'} onclick={() => (tab = 'decks')}>Kartensets</button>
     <button class:active={tab === 'profiles'} onclick={() => (tab = 'profiles')}>Kinder</button>
     <button class:active={tab === 'data'} onclick={() => (tab = 'data')}>Daten</button>
+    <button class:active={tab === 'sound'} onclick={() => (tab = 'sound')}>Ton</button>
   </nav>
 
   <main>
@@ -115,6 +117,8 @@
         {/each}
       </ul>
       <button class="primary" onclick={() => go({ name: 'profile-edit' })}>+ Neues Kind</button>
+    {:else if tab === 'sound'}
+      <SoundTest />
     {:else}
       <section>
         <h2>Exportieren</h2>
