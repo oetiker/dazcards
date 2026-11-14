@@ -60,6 +60,11 @@ const STARTER_GAMES: StarterGame[][] = [
   ],
   // v3
   [['starter-memory-sound', 'Hör-Memory', 'memory-sound', 3, 1]],
+  // v4
+  [
+    ['starter-colors', 'Farben', 'colors', 3, 8],
+    ['starter-prepositions', 'Wo ist es?', 'prepositions', 3, 8],
+  ],
 ];
 const SEED_VERSION = STARTER_GAMES.length;
 

@@ -17,6 +17,8 @@ import Plural from './Plural.svelte';
 import Puzzle from './Puzzle.svelte';
 import Bubbles from './Bubbles.svelte';
 import RepeatAfterMe from './RepeatAfterMe.svelte';
+import Colors from './Colors.svelte';
+import Prepositions from './Prepositions.svelte';
 import { oddOneOutRounds, rhymePairCount, samePairCount, sortableCategories, withImage } from '../rounds';
 import { onsetKey } from '../phonology';
 import { rhymeKey } from '../rhyme';
@@ -119,6 +121,32 @@ export const templates: GameTemplate[] = [
     check: (cards) =>
       withImage(cards).filter((c) => c.article).length >= 3 ? null : 'Braucht mindestens 3 Karten mit Bild und Artikel.',
     component: Articles,
+  },
+  {
+    id: 'colors',
+    name: 'Farben',
+    description: '«der rote Ball»: das Bild in der richtigen Farbe antippen. Die App färbt die Bilder selbst ein (rot, blau, grün, gelb, orange, lila).',
+    needs: 'Artikel',
+    icon: asset('templates/colors.svg'),
+    color: '#fff59d',
+    defaults: { choices: 3, rounds: 8 },
+    options: { choices: { label: 'Farben pro Runde', min: 2, max: 4 }, rounds: ROUNDS },
+    check: (cards) =>
+      withImage(cards).some((c) => c.article) ? null : 'Braucht Karten mit Bild und Artikel.',
+    component: Colors,
+  },
+  {
+    id: 'prepositions',
+    name: 'Wo ist es?',
+    description: '«Der Ball ist unter dem Tisch.»: das passende Bild antippen (auf, unter, neben, vor, hinter dem Tisch, in der Kiste).',
+    needs: 'Artikel',
+    icon: asset('templates/prepositions.svg'),
+    color: '#d7ccc8',
+    defaults: { choices: 3, rounds: 8 },
+    options: { choices: { label: 'Bilder pro Runde', min: 2, max: 4 }, rounds: ROUNDS },
+    check: (cards) =>
+      withImage(cards).some((c) => c.article) ? null : 'Braucht Karten mit Bild und Artikel.',
+    component: Prepositions,
   },
   {
     id: 'plural',

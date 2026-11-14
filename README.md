@@ -34,7 +34,7 @@ it builds the app and publishes it to the `gh-pages` branch, which GitHub Pages 
 ## Features (v0.1)
 
 - **Child profiles** – several children on one tablet, each with an animal and colour
-- **15 game templates**: Entdecken, Finde es, Ballone, Memory, Hör-Memory, Puzzle, Nachsprechen,
+- **17 game templates**: Entdecken, Finde es, Ballone, Memory, Hör-Memory, Puzzle, Farben, Wo ist es?, Nachsprechen,
   Der/die/das, Eins oder viele, Sortieren, Was gehört nicht dazu?, Reime,
   Was reimt sich nicht?, Anlaut, Silben klatschen (see [docs/CONCEPT.md](docs/CONCEPT.md))
 - **Positive-only feedback** – stars, chimes, praise; no failure states

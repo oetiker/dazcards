@@ -13,7 +13,8 @@ describe('starter migration', () => {
     const games = await listGames();
     expect(games.map((g) => g.id)).toContain('starter-memory');
     expect(games.find((g) => g.id === 'starter-find')?.name).toBe('Umbenannt');
-    expect(await getMeta('seedVersion')).toBe(3);
+    expect(await getMeta('seedVersion')).toBe(4);
+    expect(games.map((g) => g.id)).toContain('starter-prepositions');
     expect(games.map((g) => g.id)).toContain('starter-memory-sound');
 
     // Running again changes nothing.

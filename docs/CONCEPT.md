@@ -64,6 +64,8 @@ card set is playable and explains to adults what is missing.
 | `puzzle` | Puzzle | Drag pieces onto a board with a faint ghost picture; word at the end | – |
 | `repeat` | Nachsprechen | Hear the word, record yourself, hear yourself and the model | microphone |
 | `articles` | Der, die, das | Hear "der Hund", tap the blue/red/green house | article |
+| `colors` | Farben | Hear "der rote Ball", tap the picture in that colour (the app recolours the picture: rot, blau, grün, gelb, orange, lila) | article |
+| `prepositions` | Wo ist es? | Hear "Der Ball ist unter dem Tisch.", tap the matching scene (auf/unter/neben/vor/hinter dem Tisch, in der Kiste) | article |
 | `plural` | Eins oder viele | Hear "der Hund" or "die Hunde", tap one or many | plural |
 | `sort` | Sortieren | Sort pictures into baskets; each basket shows an example picture | category |
 | `odd-category` | Was gehört nicht dazu? | All pictures are named; tap the one from another category | category |
@@ -86,6 +88,13 @@ Design notes per template:
   Possible improvement: per-deck recordings of "der/die/das" so no TTS is needed.
 - **Colours for articles** follow the common DaZ convention: der = blue,
   die = red, das = green.
+- **Farben / Wo ist es?** generate their pictures: colours by recolouring the
+  card picture (brightness relative to the picture's average, so the main area
+  gets exactly the target colour), positions by placing the card picture in a
+  fixed scene with a table and a box. All scenes have identical furniture, so
+  only the position and the spoken sentence tell them apart. Adjective endings
+  and dative case are built in `phrases.ts` (nominative + definite article:
+  "der/die/das rote …"; "auf dem Tisch", "in der Kiste").
 - **Nachsprechen** does no speech scoring; saying the word out loud and hearing
   oneself is the exercise. Without a microphone it degrades to a listening game.
 

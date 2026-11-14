@@ -238,3 +238,26 @@ export function puzzleGrid(pieces: number): { rows: number; cols: number } {
   if (pieces <= 6) return { rows: 2, cols: 3 };
   return { rows: 3, cols: 3 };
 }
+
+// ---------- Colours and positions ----------
+
+export interface VariantRound<V> {
+  card: Card;
+  answer: V;
+  options: V[];
+}
+
+/** Same picture in several variants (colours, positions); one is asked for. */
+export function variantRounds<V>(
+  cards: Card[],
+  variants: readonly V[],
+  choices: number,
+  rounds: number,
+  rng: Rng = Math.random,
+): VariantRound<V>[] {
+  const n = Math.max(2, Math.min(choices, variants.length));
+  return pickPrompts(cards, rounds, rng).map((card) => {
+    const options = shuffle(variants, rng).slice(0, n);
+    return { card, options, answer: options[Math.floor(rng() * n)] };
+  });
+}

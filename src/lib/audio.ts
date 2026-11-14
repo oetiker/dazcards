@@ -152,6 +152,18 @@ export async function sayWithArticle(card: Card, lang: string): Promise<void> {
   return sayCard(card, lang);
 }
 
+/**
+ * Speak a phrase around a card's word ("der rote Ball", "Der Ball ist unter dem Tisch.").
+ * Without a recording the whole phrase is spoken by TTS in one go (natural
+ * intonation); with a recording, the recorded noun is inserted between TTS parts.
+ */
+export async function sayPhrase(card: Card, before: string, after: string, lang: string): Promise<void> {
+  if (!card.audioId) return speak([before, card.word, after].filter(Boolean).join(' '), lang);
+  if (before) await speak(before, lang);
+  await sayCard(card, lang);
+  if (after) await speak(after, lang);
+}
+
 /** "die Hunde" – plural forms always use TTS (only the singular is recorded). */
 export function sayPlural(card: Card, lang: string): Promise<void> {
   return speak(`die ${card.plural ?? card.word}`, lang);
