@@ -6,13 +6,11 @@
   import { app, go } from '../lib/app.svelte';
   import ParentGate from '../lib/components/ParentGate.svelte';
   import type { Profile } from '../lib/types';
-  import { applyPendingUpdate } from '../pwa';
 
   let profiles = $state<Profile[]>([]);
   let loaded = $state(false);
 
   onMount(async () => {
-    applyPendingUpdate();
     profiles = (await listProfiles()).sort((a, b) => a.createdAt - b.createdAt);
     loaded = true;
   });

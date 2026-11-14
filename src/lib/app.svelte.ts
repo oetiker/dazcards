@@ -17,4 +17,6 @@ export const app = $state<{ screen: Screen; profile: Profile | null }>({
 
 export function go(screen: Screen): void {
   app.screen = screen;
+  // A downloaded app update is applied on the next safe screen (see pwa.svelte.ts).
+  import('../pwa.svelte').then((m) => m.applyUpdateIfSafe());
 }

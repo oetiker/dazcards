@@ -2,7 +2,7 @@ import { mount } from 'svelte';
 import './app.css';
 import App from './App.svelte';
 import { unlockAudio } from './lib/audio';
-import { setupPwa } from './pwa';
+import { setupPwa } from './pwa.svelte';
 
 // iOS only allows sound after a user gesture: (re-)unlock audio on touches.
 addEventListener('pointerdown', unlockAudio, { capture: true });

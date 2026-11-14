@@ -3,10 +3,14 @@
   import { onMount } from 'svelte';
   import { listDecks, listGames, listProfiles, putDeck, listCards } from '../../lib/db';
   import { go } from '../../lib/app.svelte';
-  import { getTemplate } from '../../lib/templates';
+  import { getTemplate, templates } from '../../lib/templates';
+  const templateCount = templates.length;
   import { buildExport, importData, saveTextFile } from '../../lib/exchange';
   import { newId } from '../../lib/id';
   import SoundTest from './SoundTest.svelte';
+  import { checkForUpdate, pwa } from '../../pwa.svelte';
+  import { isTauri } from '@tauri-apps/api/core';
+  const version = __APP_VERSION__;
   import type { Deck, Game, Profile } from '../../lib/types';
 
   type Tab = 'games' | 'decks' | 'profiles' | 'data' | 'sound';
@@ -132,6 +136,20 @@
         <input type="file" accept="application/json,.json" onchange={doImport} />
       </section>
       {#if message}<p class="message">{message}</p>{/if}
+      <section>
+        <h2>Version</h2>
+        <p class="help">{version} · {templateCount} Spielvorlagen</p>
+        {#if !isTauri()}
+          <button onclick={checkForUpdate} disabled={pwa.checking}>
+            {pwa.checking ? 'Suche …' : 'Nach Update suchen'}
+          </button>
+          {#if pwa.updateReady}
+            <p class="help">Neue Version geladen – sie wird beim Verlassen dieser Seite aktiviert.</p>
+          {:else if pwa.lastCheck}
+            <p class="help">Aktuell (geprüft {pwa.lastCheck}).</p>
+          {/if}
+        {/if}
+      </section>
     {/if}
   </main>
 </div>

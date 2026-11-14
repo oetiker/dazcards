@@ -2,12 +2,26 @@ import { defineConfig } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { VitePWA } from 'vite-plugin-pwa';
 
+import { execSync } from 'node:child_process';
+
 const host = process.env.TAURI_DEV_HOST;
+
+function gitSha(): string {
+  try {
+    return execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+  } catch {
+    return 'dev';
+  }
+}
+const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ');
 
 // https://v2.tauri.app/start/frontend/vite/
 export default defineConfig({
   // "/" for Tauri and local dev; the Pages workflow sets BASE_PATH=/dazcards/
   base: process.env.BASE_PATH || '/',
+  define: {
+    __APP_VERSION__: JSON.stringify(`${stamp} UTC · ${gitSha()}`),
+  },
   plugins: [
     svelte(),
     // Installable offline web app (used on iPhone/iPad via "Add to Home Screen").
