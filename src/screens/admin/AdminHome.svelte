@@ -8,6 +8,7 @@
   import { buildExport, importData, saveTextFile } from '../../lib/exchange';
   import { newId } from '../../lib/id';
   import SoundTest from './SoundTest.svelte';
+  import SilentModeHint from '../../lib/components/SilentModeHint.svelte';
   import { checkForUpdate, pwa } from '../../pwa.svelte';
   import { isTauri } from '@tauri-apps/api/core';
   const version = __APP_VERSION__;
@@ -74,6 +75,7 @@
     <h1>Erwachsenenbereich</h1>
     <button onclick={() => go({ name: 'profiles' })}>Fertig</button>
   </header>
+  <SilentModeHint />
   <nav class="tabs">
     <button class:active={tab === 'games'} onclick={() => (tab = 'games')}>Spiele</button>
     <button class:active={tab === 'decks'} onclick={() => (tab = 'decks')}>Kartensets</button>

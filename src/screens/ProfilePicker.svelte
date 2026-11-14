@@ -5,6 +5,7 @@
   import { listProfiles } from '../lib/db';
   import { app, go } from '../lib/app.svelte';
   import ParentGate from '../lib/components/ParentGate.svelte';
+  import SilentModeHint from '../lib/components/SilentModeHint.svelte';
   import type { Profile } from '../lib/types';
 
   let profiles = $state<Profile[]>([]);
@@ -26,6 +27,7 @@
     <span></span>
     <ParentGate onunlock={() => go({ name: 'admin' })} />
   </header>
+  <SilentModeHint />
   {#if loaded && profiles.length === 0}
     <div class="empty">
       <p>Willkommen bei DaZ Cards!</p>

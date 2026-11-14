@@ -83,8 +83,9 @@
   <h2>Tipps (iPhone / iPad)</h2>
   <ul class="tips">
     <li>
-      <strong>Stumm-Modus ausschalten</strong> (Schalter bzw. Aktionstaste seitlich). Klänge funktionieren auch im
-      Stumm-Modus, die <strong>Sprachausgabe von iOS aber nicht</strong>. Lautstärke hochdrehen.
+      <strong>Häufigste Ursache: Stumm-Modus.</strong> Im Stumm-Modus bleibt die Sprachausgabe von iOS still, Klänge
+      sind aber hörbar. Das lässt sich von einer Webseite aus nicht erkennen. Stumm-Modus ausschalten (Schalter bzw.
+      Aktionstaste seitlich oder Kontrollzentrum) und Lautstärke hochdrehen.
     </li>
     <li>Zuerst einmal irgendwo in der App tippen – iOS erlaubt Ton erst nach einer Berührung.</li>
     <li>
