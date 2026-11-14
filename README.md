@@ -28,7 +28,8 @@ Notes for iOS:
   (Settings → Accessibility → Spoken Content → Voices → German).
 - Export opens the share sheet → *Save to Files* / AirDrop / Mail.
 
-Deployment happens automatically via `.github/workflows/pages.yml` on every push.
+Deployment happens automatically via `.github/workflows/pages.yml` on every push:
+it builds the app and publishes it to the `gh-pages` branch, which GitHub Pages serves.
 
 ## Features (v0.1)
 
