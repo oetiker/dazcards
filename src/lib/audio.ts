@@ -57,31 +57,65 @@ export function pickVoice(voices: SpeechSynthesisVoice[], lang: string): SpeechS
 // fires and the audio stops. Keep references until it is done.
 const alive = new Set<SpeechSynthesisUtterance>();
 
+// Optional diagnostics sink (used by the sound test page).
+let logger: ((msg: string) => void) | null = null;
+export function setSpeechLogger(fn: ((msg: string) => void) | null): void {
+  logger = fn;
+}
+const log = (msg: string) => logger?.(msg);
+
+/**
+ * Create and queue an utterance *synchronously*. iOS only lets speech start
+ * from a tap if speak() runs in the same task as the tap, so nothing may be
+ * awaited before this call.
+ */
+function speakNow(text: string, lang: string, resolve: () => void): void {
+  const u = new SpeechSynthesisUtterance(text);
+  alive.add(u);
+  // Some platforms never fire onend (e.g. no voice installed) – never let a game hang.
+  const timer = setTimeout(() => {
+    log(`timeout (speaking=${speechSynthesis.speaking}, pending=${speechSynthesis.pending}, paused=${speechSynthesis.paused})`);
+    done();
+  }, 2500 + text.length * 150);
+  function done() {
+    clearTimeout(timer);
+    alive.delete(u);
+    resolve();
+  }
+  const voice = pickVoice(speechSynthesis.getVoices(), lang);
+  if (voice) {
+    u.voice = voice;
+    u.lang = voice.lang;
+  } else {
+    u.lang = lang.startsWith('de') ? 'de-DE' : lang;
+  }
+  u.rate = 0.85; // a little slower for young learners
+  u.onstart = () => log(`start «${text}» (${voice?.name ?? 'no voice'}, ${u.lang})`);
+  u.onend = () => {
+    log(`end «${text}»`);
+    done();
+  };
+  u.onerror = (e) => {
+    log(`error «${text}»: ${(e as SpeechSynthesisErrorEvent).error ?? 'unknown'}`);
+    done();
+  };
+  // WebKit sometimes gets stuck in a paused state.
+  if (speechSynthesis.paused) speechSynthesis.resume();
+  speechSynthesis.speak(u);
+  log(`queued «${text}»`);
+}
+
 /** Speak text with the platform voice. Resolves when done (or immediately if unsupported). */
-export async function speak(text: string, lang: string): Promise<void> {
-  if (!ttsAvailable()) return;
-  if (cancelSpeech()) await new Promise((r) => setTimeout(r, 120));
-  const voice = pickVoice(await loadVoices(), lang);
+export function speak(text: string, lang: string): Promise<void> {
+  if (!ttsAvailable()) {
+    log('no speechSynthesis');
+    return Promise.resolve();
+  }
+  loadVoices(); // warm up for next time; never awaited here
   return new Promise((resolve) => {
-    const u = new SpeechSynthesisUtterance(text);
-    alive.add(u);
-    // Some platforms never fire onend (e.g. no voice installed) – never let a game hang.
-    const timer = setTimeout(() => done(), 2000 + text.length * 150);
-    function done() {
-      clearTimeout(timer);
-      alive.delete(u);
-      resolve();
-    }
-    if (voice) {
-      u.voice = voice;
-      u.lang = voice.lang;
-    } else {
-      u.lang = lang.startsWith('de') ? 'de-DE' : lang;
-    }
-    u.rate = 0.85; // a little slower for young learners
-    u.onend = done;
-    u.onerror = done;
-    speechSynthesis.speak(u);
+    // Safari drops a speak() issued right after cancel(): only then wait a moment.
+    if (cancelSpeech()) setTimeout(() => speakNow(text, lang, resolve), 120);
+    else speakNow(text, lang, resolve);
   });
 }
 
@@ -99,9 +133,11 @@ async function playUrl(url: string): Promise<void> {
 export async function sayCard(card: Card, lang: string, withArticle = false): Promise<void> {
   current?.pause();
   current = null;
+  const text = withArticle && card.article ? `${card.article} ${card.word}` : card.word;
+  // No recording: speak right away (no await), so a tap can start speech on iOS.
+  if (!card.audioId) return speak(text, lang);
   const url = await mediaUrl(card.audioId);
   if (url) return playUrl(url);
-  const text = withArticle && card.article ? `${card.article} ${card.word}` : card.word;
   return speak(text, lang);
 }
 
@@ -159,9 +195,12 @@ export function unlockAudio(): void {
     /* ignore */
   }
   if (!speechPrimed && ttsAvailable()) {
+    // A non-empty (but silent) utterance inside the first tap unlocks speech on iOS.
     speechPrimed = true;
-    const u = new SpeechSynthesisUtterance('');
+    const u = new SpeechSynthesisUtterance(' ');
     u.volume = 0;
+    u.onend = () => log('unlock utterance finished');
+    u.onerror = (e) => log(`unlock utterance error: ${(e as SpeechSynthesisErrorEvent).error}`);
     speechSynthesis.speak(u);
     loadVoices();
   }

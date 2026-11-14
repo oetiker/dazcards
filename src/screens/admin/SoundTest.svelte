@@ -1,14 +1,43 @@
 <!-- Diagnostics for adults: why is there no sound? -->
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { audioInfo, chime, pickVoice, speak } from '../../lib/audio';
+  import { onDestroy, onMount } from 'svelte';
+  import { audioInfo, chime, pickVoice, setSpeechLogger, speak } from '../../lib/audio';
 
   type Info = Awaited<ReturnType<typeof audioInfo>>;
   let info = $state<Info | null>(null);
   let spoke = $state<'idle' | 'speaking' | 'done'>('idle');
 
+  let logLines = $state<string[]>([]);
+  const t0 = performance.now();
+  const addLog = (m: string) => (logLines = [...logLines, `${((performance.now() - t0) / 1000).toFixed(1)}s ${m}`].slice(-30));
+
   const refresh = async () => (info = await audioInfo());
-  onMount(refresh);
+  onMount(() => {
+    setSpeechLogger(addLog);
+    refresh();
+  });
+  onDestroy(() => setSpeechLogger(null));
+
+  /** Bare-bones test straight in the tap handler, bypassing all app logic. */
+  function testDirect() {
+    if (typeof speechSynthesis === 'undefined') return addLog('direct: no speechSynthesis');
+    const u = new SpeechSynthesisUtterance('Hallo! Das ist der Hund.');
+    const v = pickVoice(speechSynthesis.getVoices(), 'de-DE');
+    if (v) u.voice = v;
+    u.lang = v?.lang ?? 'de-DE';
+    u.onstart = () => addLog('direct: start');
+    u.onend = () => addLog('direct: end');
+    u.onerror = (e) => addLog(`direct: error ${(e as SpeechSynthesisErrorEvent).error}`);
+    speechSynthesis.speak(u);
+    addLog(`direct: queued (voice ${v?.name ?? 'none'})`);
+    (window as unknown as { __u: unknown }).__u = u; // keep alive
+  }
+
+  function resetSpeech() {
+    speechSynthesis.cancel();
+    speechSynthesis.resume();
+    addLog(`reset: speaking=${speechSynthesis.speaking} pending=${speechSynthesis.pending} paused=${speechSynthesis.paused}`);
+  }
 
   const german = $derived(info ? info.voices.filter((v) => v.lang.toLowerCase().startsWith('de')) : []);
   const chosen = $derived(
@@ -29,7 +58,12 @@
   <div class="tests">
     <button class="primary" onclick={testSpeech}>▶ Sprachausgabe testen</button>
     <button onclick={() => { chime(); refresh(); }}>♪ Klang testen</button>
+    <button onclick={testDirect}>Direkttest</button>
+    <button onclick={resetSpeech}>Sprache zurücksetzen</button>
   </div>
+  {#if logLines.length}
+    <pre class="log">{logLines.join('\n')}</pre>
+  {/if}
   {#if spoke === 'done'}
     <p class="help">Nichts gehört? Siehe Tipps unten.</p>
   {/if}
@@ -48,7 +82,10 @@
 
   <h2>Tipps (iPhone / iPad)</h2>
   <ul class="tips">
-    <li>Lautstärke hochdrehen und den <strong>Stumm-Schalter</strong> (bzw. Fokus/«Nicht stören») prüfen.</li>
+    <li>
+      <strong>Stumm-Modus ausschalten</strong> (Schalter bzw. Aktionstaste seitlich). Klänge funktionieren auch im
+      Stumm-Modus, die <strong>Sprachausgabe von iOS aber nicht</strong>. Lautstärke hochdrehen.
+    </li>
     <li>Zuerst einmal irgendwo in der App tippen – iOS erlaubt Ton erst nach einer Berührung.</li>
     <li>
       Deutsche Stimme installieren: <em>Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Deutsch</em>,
@@ -76,5 +113,6 @@
   .status li.ok::before { content: '✓ '; color: var(--good); font-weight: 700; }
   .status li.bad::before { content: '✗ '; color: var(--danger); font-weight: 700; }
   .tips li { margin-bottom: 0.4rem; }
+  .log { margin-top: 0.75rem; max-height: 14rem; overflow-y: auto; }
   pre { font-size: 0.75rem; white-space: pre-wrap; word-break: break-all; background: var(--card); padding: 0.75rem; border-radius: 10px; }
 </style>
