@@ -1,0 +1,71 @@
+# DaZ Cards
+
+Picture and sound language games for children (3–6) who are learning German
+as a second language (**DaZ – Deutsch als Zweitsprache**) and can't read yet.
+Parents and teachers create card sets from pictures and spoken words, then
+turn them into games using ready-made game templates.
+
+Built with [Tauri 2](https://v2.tauri.app/) + Svelte 5 + TypeScript, for
+desktop (Windows, macOS, Linux) and mobile (Android, iOS). Fully offline.
+
+See [docs/CONCEPT.md](docs/CONCEPT.md) for the design decisions and roadmap.
+
+## Features (v0.1)
+
+- **Child profiles** – several children on one tablet, each with an animal and colour
+- **Game templates**: *Entdecken* (explore), *Finde es* (find it), *Reime* (rhymes)
+- **Positive-only feedback** – stars, chimes, praise; no failure states
+- **Card editor** for adults: own photo or bundled picture, record the word with the
+  microphone or load an audio file, optional article / plural / category / rhyme / syllables
+- **Game editor**: template + card set + number of pictures and rounds
+- Starter set "Erste Wörter" with 23 words and many rhyme pairs
+- **JSON export/import** of everything (media embedded), or of single card sets
+- Adult area protected by press-and-hold (3 s) on the cog
+
+## Development
+
+Prerequisites: Node 20+, Rust (stable) and the
+[Tauri prerequisites](https://v2.tauri.app/start/prerequisites/) for your OS.
+
+```sh
+npm install
+npm run dev          # frontend only, in the browser at http://localhost:1420
+npm run tauri dev    # desktop app
+npm run check        # svelte-check / TypeScript
+npm test             # unit tests (vitest)
+npm run tauri build  # release bundle
+```
+
+Mobile (needs Android SDK/NDK or Xcode):
+
+```sh
+npm run tauri android init && npm run tauri android dev
+npm run tauri ios init && npm run tauri ios dev
+```
+
+For microphone recording on mobile, add the permission after `init`:
+`RECORD_AUDIO` in the Android manifest, `NSMicrophoneUsageDescription` in the iOS Info.plist.
+
+## Project layout
+
+```
+src/
+  lib/
+    types.ts           data model
+    db.ts              IndexedDB storage
+    templates/         game templates + registry (index.ts)
+    rounds.ts          pure round generation (tested)
+    rhyme.ts           German rhyme-key heuristic (tested)
+    audio.ts           recordings, TTS fallback, sound effects
+    exchange.ts        JSON export / import
+    starter.ts         bundled starter card set
+  screens/             kid screens (profiles, home, play) and admin/ screens
+src-tauri/             Rust shell (dialog + fs plugins for export)
+tests/                 vitest unit tests
+public/                bundled pictures (Twemoji, CC BY 4.0)
+```
+
+## License
+
+Code: [GPL-3.0-or-later](LICENSE). Bundled pictures: Twemoji, CC BY 4.0. See
+[ASSETS.md](ASSETS.md).
