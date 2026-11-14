@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { asset } from '../../lib/asset';
   import { onMount } from 'svelte';
   import { deleteProfile, listPlays, listProfiles, putProfile } from '../../lib/db';
   import { app, go } from '../../lib/app.svelte';
@@ -65,7 +66,7 @@
             style:background={profile.color}
             onclick={() => profile && (profile.avatar = `${a}.svg`)}
           >
-            <img src="/avatars/{a}.svg" alt="" />
+            <img src={asset(`avatars/${a}.svg`)} alt="" />
           </button>
         {/each}
       </div>

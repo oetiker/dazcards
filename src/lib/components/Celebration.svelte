@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { asset } from '../asset';
   import { onMount } from 'svelte';
   import { fanfare, praise } from '../audio';
 
@@ -29,7 +30,7 @@
   {/each}
   <div class="stars">
     {#each Array(stars) as _, i}
-      <img src="/star.svg" alt="" style:animation-delay="{0.2 + i * 0.25}s" />
+      <img src={asset('star.svg')} alt="" style:animation-delay="{0.2 + i * 0.25}s" />
     {/each}
   </div>
   <button class="next" onclick={ondone} aria-label="Weiter">

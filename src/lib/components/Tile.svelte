@@ -1,5 +1,6 @@
 <!-- A big tappable picture card with positive-only feedback states. -->
 <script lang="ts">
+  import { asset } from '../asset';
   import CardImage from './CardImage.svelte';
   import type { Card } from '../types';
 
@@ -12,7 +13,7 @@
 
 <button class="tile {state}" {onclick} aria-label={card.word}>
   <CardImage {card} />
-  {#if state === 'correct'}<img class="star" src="/star.svg" alt="" />{/if}
+  {#if state === 'correct'}<img class="star" src={asset('star.svg')} alt="" />{/if}
 </button>
 
 <style>

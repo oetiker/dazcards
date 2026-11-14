@@ -1,5 +1,7 @@
 // Bundled picture library (files in /public/starter, Twemoji CC BY 4.0).
 // Adults can pick from these or supply their own photos/images.
+import { asset } from './asset';
+
 export interface LibraryImage { file: string; label: string; }
 
 export const LIBRARY: LibraryImage[] = [
@@ -7,7 +9,7 @@ export const LIBRARY: LibraryImage[] = [
   'schwein', 'hund', 'mund', 'nase', 'hase', 'apfel', 'auto', 'baum', 'fisch', 'sonne', 'ball',
 ].map((file) => ({ file, label: file }));
 
-export const libraryUrl = (file: string) => `/starter/${file}.svg`;
+export const libraryUrl = (file: string) => asset(`starter/${file}.svg`);
 
 export async function libraryBlob(file: string): Promise<Blob> {
   const b = await (await fetch(libraryUrl(file))).blob();

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { asset } from '../../lib/asset';
   import { onMount } from 'svelte';
   import { listDecks, listGames, listProfiles, putDeck, listCards } from '../../lib/db';
   import { go } from '../../lib/app.svelte';
@@ -107,7 +108,7 @@
         {#each profiles as p (p.id)}
           <li>
             <button class="row with-avatar" onclick={() => go({ name: 'profile-edit', profileId: p.id })}>
-              <img src="/avatars/{p.avatar}" alt="" style:background={p.color} />
+              <img src={asset(`avatars/${p.avatar}`)} alt="" style:background={p.color} />
               <strong>{p.name}</strong>
             </button>
           </li>

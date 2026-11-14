@@ -111,7 +111,18 @@ export async function saveTextFile(name: string, text: string): Promise<boolean>
     await writeTextFile(path, text);
     return true;
   }
-  const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+  // iPhone/iPad: the share sheet lets the user "Save to Files", AirDrop or mail it.
+  const file = new File([text], name, { type: 'application/json' });
+  if (navigator.canShare?.({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file] });
+      return true;
+    } catch (e) {
+      if ((e as Error).name === 'AbortError') return false;
+      // e.g. NotAllowedError when the tap "expired" during a long export: fall back to download
+    }
+  }
+  const url = URL.createObjectURL(file);
   const a = Object.assign(document.createElement('a'), { href: url, download: name });
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);

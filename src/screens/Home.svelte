@@ -1,5 +1,6 @@
 <!-- Game selection for the current child: big picture buttons, no text needed. -->
 <script lang="ts">
+  import { asset } from '../lib/asset';
   import { onMount } from 'svelte';
   import { listDecks, listGames, listPlays, listCards } from '../lib/db';
   import { app, go } from '../lib/app.svelte';
@@ -31,10 +32,10 @@
 <div class="screen">
   <header>
     <button class="me" style:--c={app.profile?.color} onclick={() => go({ name: 'profiles' })} aria-label="Kind wechseln">
-      <img src="/avatars/{app.profile?.avatar}" alt="" />
+      <img src={asset(`avatars/${app.profile?.avatar}`)} alt="" />
     </button>
     <div class="stars" aria-label="{stars} Sterne">
-      <img src="/star.svg" alt="" /> <span>{stars}</span>
+      <img src={asset('star.svg')} alt="" /> <span>{stars}</span>
     </div>
     <ParentGate onunlock={() => go({ name: 'admin' })} />
   </header>

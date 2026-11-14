@@ -1,11 +1,12 @@
 <!-- Stars filling up as rounds are completed – only ever counts upwards. -->
 <script lang="ts">
+  import { asset } from '../asset';
   let { done, total }: { done: number; total: number } = $props();
 </script>
 
 <div class="progress" aria-label="{done} von {total}">
   {#each Array(total) as _, i}
-    <img src="/star.svg" alt="" class:off={i >= done} />
+    <img src={asset('star.svg')} alt="" class:off={i >= done} />
   {/each}
 </div>
 

@@ -1,15 +1,18 @@
 <!-- "Who is playing?" – kids pick their animal; no reading needed. -->
 <script lang="ts">
+  import { asset } from '../lib/asset';
   import { onMount } from 'svelte';
   import { listProfiles } from '../lib/db';
   import { app, go } from '../lib/app.svelte';
   import ParentGate from '../lib/components/ParentGate.svelte';
   import type { Profile } from '../lib/types';
+  import { applyPendingUpdate } from '../pwa';
 
   let profiles = $state<Profile[]>([]);
   let loaded = $state(false);
 
   onMount(async () => {
+    applyPendingUpdate();
     profiles = (await listProfiles()).sort((a, b) => a.createdAt - b.createdAt);
     loaded = true;
   });
@@ -34,7 +37,7 @@
   <div class="grid">
     {#each profiles as p (p.id)}
       <button class="profile" style:--c={p.color} onclick={() => pick(p)} aria-label={p.name}>
-        <img src="/avatars/{p.avatar}" alt="" />
+        <img src={asset(`avatars/${p.avatar}`)} alt="" />
         <span>{p.name}</span>
       </button>
     {/each}

@@ -63,8 +63,28 @@ export function praise(): Promise<void> {
 // ---- tiny synthesised sound effects (no audio assets needed) ----
 let ctx: AudioContext | null = null;
 
+/**
+ * iOS Safari blocks audio and speech until they are first used inside a user
+ * gesture. Call this from the first tap; later (timer-driven) playback then works.
+ */
+export function unlockAudio(): void {
+  try {
+    ctx ??= new AudioContext();
+    if (ctx.state === 'suspended') ctx.resume();
+    const b = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = b;
+    src.connect(ctx.destination);
+    src.start(0);
+  } catch {
+    /* ignore */
+  }
+  if (ttsAvailable()) speechSynthesis.speak(new SpeechSynthesisUtterance(' '));
+}
+
 function tone(freq: number, start: number, dur: number, gain = 0.15): void {
   ctx ??= new AudioContext();
+  if (ctx.state === 'suspended') ctx.resume();
   const o = ctx.createOscillator();
   const g = ctx.createGain();
   o.type = 'sine';

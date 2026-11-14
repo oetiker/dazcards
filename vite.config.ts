@@ -1,11 +1,45 @@
 import { defineConfig } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { VitePWA } from 'vite-plugin-pwa';
 
 const host = process.env.TAURI_DEV_HOST;
 
 // https://v2.tauri.app/start/frontend/vite/
 export default defineConfig({
-  plugins: [svelte()],
+  // "/" for Tauri and local dev; the Pages workflow sets BASE_PATH=/dazcards/
+  base: process.env.BASE_PATH || '/',
+  plugins: [
+    svelte(),
+    // Installable offline web app (used on iPhone/iPad via "Add to Home Screen").
+    // The service worker is registered from main.ts, and never inside Tauri.
+    VitePWA({
+      registerType: 'prompt',
+      injectRegister: null,
+      includeAssets: ['apple-touch-icon.png', 'star.svg'],
+      manifest: {
+        name: 'DaZ Cards',
+        short_name: 'DaZ Cards',
+        description: 'Bild- und Hörspiele zum Deutschlernen für Kinder (DaZ)',
+        lang: 'de',
+        start_url: '.',
+        scope: '.',
+        display: 'standalone',
+        orientation: 'any',
+        background_color: '#fff8ec',
+        theme_color: '#3f8efc',
+        icons: [
+          { src: 'pwa-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'pwa-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+      },
+      workbox: {
+        // Precache everything, including the bundled pictures, so the app works fully offline.
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,webmanifest}'],
+        cleanupOutdatedCaches: true,
+      },
+    }),
+  ],
   clearScreen: false,
   server: {
     port: 1420,
@@ -16,7 +50,7 @@ export default defineConfig({
   },
   envPrefix: ['VITE_', 'TAURI_ENV_*'],
   build: {
-    target: process.env.TAURI_ENV_PLATFORM === 'windows' ? 'chrome105' : 'safari13',
+    target: process.env.TAURI_ENV_PLATFORM === 'windows' ? 'chrome105' : 'safari15',
     minify: !process.env.TAURI_ENV_DEBUG ? 'esbuild' : false,
     sourcemap: !!process.env.TAURI_ENV_DEBUG,
   },

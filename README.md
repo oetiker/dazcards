@@ -10,6 +10,26 @@ desktop (Windows, macOS, Linux) and mobile (Android, iOS). Fully offline.
 
 See [docs/CONCEPT.md](docs/CONCEPT.md) for the design decisions and roadmap.
 
+## Try it on iPhone / iPad (web app)
+
+The same app is published as an offline-capable web app (PWA):
+**https://oetiker.github.io/dazcards/**
+
+1. Open the link in **Safari**.
+2. Tap *Share* → **Add to Home Screen**.
+3. Start it from the home-screen icon. After the first start it works without internet.
+
+Notes for iOS:
+- Data (cards, recordings, profiles) is stored **on the device, per app**. The
+  home-screen app and the Safari tab have separate storage, so always use the icon.
+  Use *Daten → Export* regularly as a backup; deleting the icon deletes the data.
+- Sound starts after the first tap (iOS rule). If there is no sound, check the
+  silent switch, and that a German voice is installed
+  (Settings → Accessibility → Spoken Content → Voices → German).
+- Export opens the share sheet → *Save to Files* / AirDrop / Mail.
+
+Deployment happens automatically via `.github/workflows/pages.yml` on every push.
+
 ## Features (v0.1)
 
 - **Child profiles** – several children on one tablet, each with an animal and colour
@@ -34,6 +54,7 @@ npm run tauri dev    # desktop app
 npm run check        # svelte-check / TypeScript
 npm test             # unit tests (vitest)
 npm run tauri build  # release bundle
+BASE_PATH=/dazcards/ npm run build   # web/PWA build as deployed to GitHub Pages
 ```
 
 Mobile (needs Android SDK/NDK or Xcode):
