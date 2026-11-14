@@ -60,6 +60,7 @@ card set is playable and explains to adults what is missing.
 | `find-it` | Finde es | Hear a word, tap the matching picture | – |
 | `bubbles` | Ballone | Balloons with pictures float up; pop the one that was named | – |
 | `memory` | Memory | Find pairs; every turned card says its word | – |
+| `memory-sound` | Hör-Memory | Pairs of a silent picture card and a sound card (speaker icon) | – |
 | `puzzle` | Puzzle | Drag pieces onto a board with a faint ghost picture; word at the end | – |
 | `repeat` | Nachsprechen | Hear the word, record yourself, hear yourself and the model | microphone |
 | `articles` | Der, die, das | Hear "der Hund", tap the blue/red/green house | article |

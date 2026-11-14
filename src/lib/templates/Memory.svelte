@@ -1,17 +1,24 @@
 <!--
   Memory: find the pairs. Every turned card says its word; a pair stays open
   with a chime. Non-matching cards simply turn back – no penalty.
+
+  Sound mode (Hör-Memory): each pair is a silent picture card and a sound card
+  (speaker icon) that plays the word – the child matches what they hear to
+  the picture. The word is spoken once a pair is found.
 -->
 <script lang="ts">
   import { onDestroy } from 'svelte';
   import CardImage from '../components/CardImage.svelte';
   import { chime, praise, sayCard, stopAll, wait } from '../audio';
   import { memoryTiles, type MemoryTile } from '../rounds';
+  import SpeakerIcon from '../components/SpeakerIcon.svelte';
   import type { TemplateProps } from './types';
 
-  let { game, deck, cards, onfinish }: TemplateProps = $props();
+  let { game, deck, cards, onfinish, mode = 'pictures' }: TemplateProps & { mode?: 'pictures' | 'sound' } = $props();
   // svelte-ignore state_referenced_locally
-  const tiles = memoryTiles(cards, game.options.choices);
+  const tiles = memoryTiles(cards, game.options.choices, Math.random, mode);
+  /** A turned tile speaks unless it is a silent picture in sound mode. */
+  const speaks = (t: MemoryTile) => mode !== 'sound' || t.kind === 'sound';
   let open = $state<string[]>([]); // keys currently face up (max 2)
   let matched = $state(new Set<string>()); // card ids
   let busy = false;
@@ -23,13 +30,15 @@
     if (busy || open.includes(t.key) || matched.has(t.card.id)) return;
     open = [...open, t.key];
     if (open.length === 1) {
-      sayCard(t.card, deck.lang, true);
+      if (speaks(t)) sayCard(t.card, deck.lang, true);
       return;
     }
     busy = true;
     const first = tiles.find((x) => x.key === open[0])!;
-    await sayCard(t.card, deck.lang, true);
+    if (speaks(t)) await sayCard(t.card, deck.lang, true);
+    else await wait(400);
     if (first.card.id === t.card.id) {
+      if (mode === 'sound') await sayCard(t.card, deck.lang, true);
       chime();
       matched = new Set([...matched, t.card.id]);
       open = [];
@@ -49,10 +58,16 @@
 <div class="memory" style:--cols={cols}>
   {#each tiles as t (t.key)}
     {@const up = open.includes(t.key) || matched.has(t.card.id)}
-    <button class="tile" class:up class:matched={matched.has(t.card.id)} onclick={() => flip(t)} aria-label={up ? t.card.word : 'Karte'}>
+    <button class="tile" class:up class:matched={matched.has(t.card.id)} onclick={() => flip(t)} aria-label={up ? (t.kind === 'sound' ? 'Ton' : t.card.word) : 'Karte'}>
       <div class="inner">
         <div class="back"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Ccircle cx='5' cy='5' r='3' fill='%23fff' opacity='.5'/%3E%3C/svg%3E" alt="" /></div>
-        <div class="front"><CardImage card={t.card} /></div>
+        <div class="front" class:sound={t.kind === 'sound'}>
+          {#if t.kind === 'sound' && !matched.has(t.card.id)}
+            <SpeakerIcon />
+          {:else}
+            <CardImage card={t.card} />
+          {/if}
+        </div>
       </div>
     </button>
   {/each}
@@ -80,4 +95,6 @@
   .back img { width: 40%; }
   .front { background: var(--card); transform: rotateY(180deg); padding: 10%; box-sizing: border-box; }
   .matched .front { outline: 5px solid var(--good); }
+  .front.sound { background: var(--accent); color: white; }
+  .matched .front.sound { background: var(--card); }
 </style>

@@ -58,6 +58,8 @@ const STARTER_GAMES: StarterGame[][] = [
     ['starter-first-sound', 'Anlaut', 'first-sound', 3, 6],
     ['starter-syllables', 'Silben klatschen', 'syllables', 1, 6],
   ],
+  // v3
+  [['starter-memory-sound', 'Hör-Memory', 'memory-sound', 3, 1]],
 ];
 const SEED_VERSION = STARTER_GAMES.length;
 

@@ -94,15 +94,25 @@ function groupBy(cards: Card[], key: (c: Card) => string | undefined): Map<strin
 export interface MemoryTile {
   key: string;
   card: Card;
+  /** 'sound' tiles show a speaker and only play the word (sound memory). */
+  kind: 'picture' | 'sound';
 }
 
-/** Two tiles per card, shuffled. */
-export function memoryTiles(cards: Card[], pairs: number, rng: Rng = Math.random): MemoryTile[] {
+/**
+ * Two tiles per card, shuffled. In 'sound' mode each pair is one picture tile
+ * and one sound tile; otherwise two identical picture tiles.
+ */
+export function memoryTiles(
+  cards: Card[],
+  pairs: number,
+  rng: Rng = Math.random,
+  mode: 'pictures' | 'sound' = 'pictures',
+): MemoryTile[] {
   const chosen = shuffle(withImage(cards), rng).slice(0, Math.max(2, pairs));
   return shuffle(
-    chosen.flatMap((card) => [
-      { key: `${card.id}-a`, card },
-      { key: `${card.id}-b`, card },
+    chosen.flatMap((card): MemoryTile[] => [
+      { key: `${card.id}-a`, card, kind: 'picture' },
+      { key: `${card.id}-b`, card, kind: mode === 'sound' ? 'sound' : 'picture' },
     ]),
     rng,
   );

@@ -47,6 +47,16 @@ describe('memory', () => {
   });
 });
 
+describe('sound memory', () => {
+  it('pairs one picture tile with one sound tile per card', () => {
+    const tiles = memoryTiles(cards, 3, Math.random, 'sound');
+    expect(tiles).toHaveLength(6);
+    for (const id of new Set(tiles.map((t) => t.card.id))) {
+      expect(tiles.filter((t) => t.card.id === id).map((t) => t.kind).sort()).toEqual(['picture', 'sound']);
+    }
+  });
+});
+
 describe('der/die/das', () => {
   it('maps each card to the bin of its article', () => {
     for (const r of articleRounds(cards, 20)) expect(['der', 'die', 'das'][r.bin]).toBe(r.card.article);

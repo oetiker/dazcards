@@ -6,6 +6,7 @@ import Explore from './Explore.svelte';
 import FindIt from './FindIt.svelte';
 import Rhyme from './Rhyme.svelte';
 import Memory from './Memory.svelte';
+import MemorySound from './MemorySound.svelte';
 import Articles from './Articles.svelte';
 import Sort from './Sort.svelte';
 import OddCategory from './OddCategory.svelte';
@@ -71,6 +72,17 @@ export const templates: GameTemplate[] = [
     options: { choices: { label: 'Paare', min: 2, max: 10 } },
     check: needImages(2),
     component: Memory,
+  },
+  {
+    id: 'memory-sound',
+    name: 'Hör-Memory',
+    description: 'Paare aus Bildkarte und Tonkarte finden: Die Tonkarte sagt ein Wort, die Bildkarte ist stumm.',
+    icon: asset('templates/memory-sound.svg'),
+    color: '#ffccbc',
+    defaults: { choices: 3, rounds: 1 },
+    options: { choices: { label: 'Paare', min: 2, max: 8 } },
+    check: needImages(2),
+    component: MemorySound,
   },
   {
     id: 'puzzle',
