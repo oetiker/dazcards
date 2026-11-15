@@ -1,0 +1,48 @@
+# Experiment: can GitHub's macOS (Apple Silicon) runners use the GPU (Metal)
+# for generating speech with Qwen3-TTS via MLX? Prints hardware info, runs a
+# Metal benchmark, and tries mlx-audio. Manual / on change of this file only.
+name: TTS probe (macOS Metal)
+
+on:
+  workflow_dispatch:
+  push:
+    paths: ['.github/workflows/tts-probe.yml', 'scripts/tts/**']
+
+jobs:
+  probe:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - name: Hardware
+        run: |
+          sw_vers; uname -m; sysctl -n machdep.cpu.brand_string hw.ncpu hw.memsize
+          system_profiler SPDisplaysDataType | head -30
+          df -h / | tail -1
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Metal check with MLX
+        run: |
+          pip install -q mlx
+          python - <<'PY'
+          import time, mlx.core as mx
+          print("default device:", mx.default_device())
+          print("metal available:", mx.metal.is_available())
+          for dev in (mx.gpu, mx.cpu):
+              try:
+                  mx.set_default_device(dev)
+                  a = mx.random.normal((2048, 2048)); mx.eval(a)
+                  t = time.time()
+                  for _ in range(20): b = a @ a
+                  mx.eval(b)
+                  dt = time.time() - t
+                  print(f"{dev}: 20 matmuls 2048x2048 in {dt:.2f}s = {20*2*2048**3/dt/1e9:.0f} GFLOP/s")
+              except Exception as e:
+                  print(f"{dev}: FAILED {e}")
+          PY
+      - name: mlx-audio help
+        continue-on-error: true
+        run: |
+          pip install -q mlx-audio
+          python -m mlx_audio.tts.generate --help | head -60
