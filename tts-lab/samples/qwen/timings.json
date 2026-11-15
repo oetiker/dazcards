@@ -1,0 +1,156 @@
+[
+ {
+  "file": "design-frau-ref.mp3",
+  "text": "Hallo! Heute schauen wir uns zusammen schöne Bilder an. Hör gut zu und sprich mit mir.",
+  "seconds": 6.0,
+  "gen_seconds": 23.3,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "design-frau-hund.mp3",
+  "text": "der Hund",
+  "seconds": 0.72,
+  "gen_seconds": 4.61,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "design-frau-rose.mp3",
+  "text": "die rote Rose",
+  "seconds": 1.36,
+  "gen_seconds": 1.87,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "design-frau-tisch.mp3",
+  "text": "Der Ball ist unter dem Tisch.",
+  "seconds": 2.08,
+  "gen_seconds": 2.92,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "design-frau-reim.mp3",
+  "text": "Haus, Maus.",
+  "seconds": 1.44,
+  "gen_seconds": 2.32,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "design-frau-lob.mp3",
+  "text": "Super! Das hast du toll gemacht!",
+  "seconds": 2.4,
+  "gen_seconds": 3.44,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "design-mann-ref.mp3",
+  "text": "Hallo! Heute schauen wir uns zusammen schöne Bilder an. Hör gut zu und sprich mit mir.",
+  "seconds": 5.92,
+  "gen_seconds": 13.4,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "design-mann-hund.mp3",
+  "text": "der Hund",
+  "seconds": 1.04,
+  "gen_seconds": 7.03,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "design-mann-rose.mp3",
+  "text": "die rote Rose",
+  "seconds": 1.68,
+  "gen_seconds": 8.07,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "design-mann-tisch.mp3",
+  "text": "Der Ball ist unter dem Tisch.",
+  "seconds": 1.84,
+  "gen_seconds": 7.77,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "design-mann-reim.mp3",
+  "text": "Haus, Maus.",
+  "seconds": 1.52,
+  "gen_seconds": 4.41,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "design-mann-lob.mp3",
+  "text": "Super! Das hast du toll gemacht!",
+  "seconds": 2.16,
+  "gen_seconds": 10.13,
+  "peak_gb": 5.17
+ },
+ {
+  "file": "clone-frau-hund.mp3",
+  "text": "der Hund",
+  "seconds": 1.28,
+  "gen_seconds": 37.7,
+  "peak_gb": 6.01
+ },
+ {
+  "file": "clone-frau-rose.mp3",
+  "text": "die rote Rose",
+  "seconds": 1.76,
+  "gen_seconds": 19.88,
+  "peak_gb": 6.01
+ },
+ {
+  "file": "clone-frau-tisch.mp3",
+  "text": "Der Ball ist unter dem Tisch.",
+  "seconds": 2.0,
+  "gen_seconds": 13.41,
+  "peak_gb": 6.01
+ },
+ {
+  "file": "clone-frau-reim.mp3",
+  "text": "Haus, Maus.",
+  "seconds": 1.6,
+  "gen_seconds": 11.06,
+  "peak_gb": 6.01
+ },
+ {
+  "file": "clone-frau-lob.mp3",
+  "text": "Super! Das hast du toll gemacht!",
+  "seconds": 2.16,
+  "gen_seconds": 18.41,
+  "peak_gb": 6.01
+ },
+ {
+  "file": "clone-mann-hund.mp3",
+  "text": "der Hund",
+  "seconds": 0.64,
+  "gen_seconds": 15.74,
+  "peak_gb": 6.01
+ },
+ {
+  "file": "clone-mann-rose.mp3",
+  "text": "die rote Rose",
+  "seconds": 1.36,
+  "gen_seconds": 12.0,
+  "peak_gb": 6.01
+ },
+ {
+  "file": "clone-mann-tisch.mp3",
+  "text": "Der Ball ist unter dem Tisch.",
+  "seconds": 2.0,
+  "gen_seconds": 15.44,
+  "peak_gb": 6.01
+ },
+ {
+  "file": "clone-mann-reim.mp3",
+  "text": "Haus, Maus.",
+  "seconds": 2.0,
+  "gen_seconds": 15.58,
+  "peak_gb": 6.01
+ },
+ {
+  "file": "clone-mann-lob.mp3",
+  "text": "Super! Das hast du toll gemacht!",
+  "seconds": 2.48,
+  "gen_seconds": 16.24,
+  "peak_gb": 6.01
+ }
+]
