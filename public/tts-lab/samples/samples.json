@@ -1,76 +1,202 @@
 {
- "text": "Der Hund. Die rote Rose. Der Ball ist unter dem Tisch. Haus, Maus. Super! Das hast du toll gemacht!",
- "note": "Erzeugt mit Piper (natives Programm), Tempo 1.15 (etwas langsamer). Im Browser entsteht dieselbe Qualität.",
- "samples": [
+ "groups": [
   {
-   "file": "thorsten-medium.mp3",
-   "label": "Thorsten – mittel (CC0)",
-   "seconds": 10.9
+   "title": "Qwen3-TTS 1.7B – Stimme per Beschreibung",
+   "note": "Stimme in Worten beschrieben («warm, freundlich, wie eine Kindergärtnerin, langsam, Hochdeutsch»). Jeder Satz einzeln erzeugt – die Stimme kann von Satz zu Satz leicht variieren. Erzeugt auf einem GitHub-Mac-Runner (Metal), MP3 64 kbit/s mono.",
+   "samples": [
+    {
+     "file": "qwen/design-frau-ref.mp3",
+     "label": "Frau, beschrieben (VoiceDesign): «Hallo! Heute schauen wir uns zusammen schöne Bilder an. Hör gut zu und sprich mit mir.»",
+     "seconds": 6.0
+    },
+    {
+     "file": "qwen/design-frau-hund.mp3",
+     "label": "Frau, beschrieben (VoiceDesign): «der Hund»",
+     "seconds": 0.72
+    },
+    {
+     "file": "qwen/design-frau-rose.mp3",
+     "label": "Frau, beschrieben (VoiceDesign): «die rote Rose»",
+     "seconds": 1.36
+    },
+    {
+     "file": "qwen/design-frau-tisch.mp3",
+     "label": "Frau, beschrieben (VoiceDesign): «Der Ball ist unter dem Tisch.»",
+     "seconds": 2.08
+    },
+    {
+     "file": "qwen/design-frau-reim.mp3",
+     "label": "Frau, beschrieben (VoiceDesign): «Haus, Maus.»",
+     "seconds": 1.44
+    },
+    {
+     "file": "qwen/design-frau-lob.mp3",
+     "label": "Frau, beschrieben (VoiceDesign): «Super! Das hast du toll gemacht!»",
+     "seconds": 2.4
+    },
+    {
+     "file": "qwen/design-mann-ref.mp3",
+     "label": "Mann, beschrieben (VoiceDesign): «Hallo! Heute schauen wir uns zusammen schöne Bilder an. Hör gut zu und sprich mit mir.»",
+     "seconds": 5.92
+    },
+    {
+     "file": "qwen/design-mann-hund.mp3",
+     "label": "Mann, beschrieben (VoiceDesign): «der Hund»",
+     "seconds": 1.04
+    },
+    {
+     "file": "qwen/design-mann-rose.mp3",
+     "label": "Mann, beschrieben (VoiceDesign): «die rote Rose»",
+     "seconds": 1.68
+    },
+    {
+     "file": "qwen/design-mann-tisch.mp3",
+     "label": "Mann, beschrieben (VoiceDesign): «Der Ball ist unter dem Tisch.»",
+     "seconds": 1.84
+    },
+    {
+     "file": "qwen/design-mann-reim.mp3",
+     "label": "Mann, beschrieben (VoiceDesign): «Haus, Maus.»",
+     "seconds": 1.52
+    },
+    {
+     "file": "qwen/design-mann-lob.mp3",
+     "label": "Mann, beschrieben (VoiceDesign): «Super! Das hast du toll gemacht!»",
+     "seconds": 2.16
+    }
+   ]
   },
   {
-   "file": "thorsten-high.mp3",
-   "label": "Thorsten – hoch (CC0)",
-   "seconds": 9.8
+   "title": "Qwen3-TTS 1.7B – geklonte Stimme",
+   "note": "Die beschriebene Stimme wurde einmal erzeugt (Referenzsatz) und dann für alle Sätze geklont: gleichbleibende Stimme für alle Clips. Erzeugt auf einem GitHub-Mac-Runner (Metal), MP3 64 kbit/s mono.",
+   "samples": [
+    {
+     "file": "qwen/clone-frau-hund.mp3",
+     "label": "Frau, geklont (Base): «der Hund»",
+     "seconds": 1.28
+    },
+    {
+     "file": "qwen/clone-frau-rose.mp3",
+     "label": "Frau, geklont (Base): «die rote Rose»",
+     "seconds": 1.76
+    },
+    {
+     "file": "qwen/clone-frau-tisch.mp3",
+     "label": "Frau, geklont (Base): «Der Ball ist unter dem Tisch.»",
+     "seconds": 2.0
+    },
+    {
+     "file": "qwen/clone-frau-reim.mp3",
+     "label": "Frau, geklont (Base): «Haus, Maus.»",
+     "seconds": 1.6
+    },
+    {
+     "file": "qwen/clone-frau-lob.mp3",
+     "label": "Frau, geklont (Base): «Super! Das hast du toll gemacht!»",
+     "seconds": 2.16
+    },
+    {
+     "file": "qwen/clone-mann-hund.mp3",
+     "label": "Mann, geklont (Base): «der Hund»",
+     "seconds": 0.64
+    },
+    {
+     "file": "qwen/clone-mann-rose.mp3",
+     "label": "Mann, geklont (Base): «die rote Rose»",
+     "seconds": 1.36
+    },
+    {
+     "file": "qwen/clone-mann-tisch.mp3",
+     "label": "Mann, geklont (Base): «Der Ball ist unter dem Tisch.»",
+     "seconds": 2.0
+    },
+    {
+     "file": "qwen/clone-mann-reim.mp3",
+     "label": "Mann, geklont (Base): «Haus, Maus.»",
+     "seconds": 2.0
+    },
+    {
+     "file": "qwen/clone-mann-lob.mp3",
+     "label": "Mann, geklont (Base): «Super! Das hast du toll gemacht!»",
+     "seconds": 2.48
+    }
+   ]
   },
   {
-   "file": "kerstin-medium.mp3",
-   "label": "Kerstin – mittel (CC0)",
-   "seconds": 12.1
-  },
-  {
-   "file": "kerstin-low.mp3",
-   "label": "Kerstin – niedrig (CC0)",
-   "seconds": 9.9
-  },
-  {
-   "file": "eva_k-x_low.mp3",
-   "label": "Eva K – sehr klein",
-   "seconds": 12.9
-  },
-  {
-   "file": "ramona-low.mp3",
-   "label": "Ramona – niedrig",
-   "seconds": 9.9
-  },
-  {
-   "file": "pavoque-low.mp3",
-   "label": "Pavoque – niedrig",
-   "seconds": 11.4
-  },
-  {
-   "file": "karlsson-low.mp3",
-   "label": "Karlsson – niedrig",
-   "seconds": 10.2
-  },
-  {
-   "file": "thorsten-emotional-neutral.mp3",
-   "label": "Thorsten emotional – neutral (CC0)",
-   "seconds": 8.8
-  },
-  {
-   "file": "thorsten-emotional-amused.mp3",
-   "label": "Thorsten emotional – amüsiert (CC0)",
-   "seconds": 8.9
-  },
-  {
-   "file": "thorsten-emotional-surprised.mp3",
-   "label": "Thorsten emotional – überrascht (CC0)",
-   "seconds": 9.9
-  },
-  {
-   "file": "mls-speaker-3.mp3",
-   "label": "MLS – Sprecher*in 3",
-   "seconds": 18.5
-  },
-  {
-   "file": "mls-speaker-42.mp3",
-   "label": "MLS – Sprecher*in 42",
-   "seconds": 24.1
-  },
-  {
-   "file": "mls-speaker-120.mp3",
-   "label": "MLS – Sprecher*in 120",
-   "seconds": 18.2
+   "title": "Piper (läuft auch direkt im Browser)",
+   "note": "Erzeugt mit Piper (natives Programm), Tempo 1.15 (etwas langsamer). Im Browser entsteht dieselbe Qualität. Text: «Der Hund. Die rote Rose. Der Ball ist unter dem Tisch. Haus, Maus. Super! Das hast du toll gemacht!»",
+   "samples": [
+    {
+     "file": "thorsten-medium.mp3",
+     "label": "Thorsten – mittel (CC0)",
+     "seconds": 10.9
+    },
+    {
+     "file": "thorsten-high.mp3",
+     "label": "Thorsten – hoch (CC0)",
+     "seconds": 9.8
+    },
+    {
+     "file": "kerstin-medium.mp3",
+     "label": "Kerstin – mittel (CC0)",
+     "seconds": 12.1
+    },
+    {
+     "file": "kerstin-low.mp3",
+     "label": "Kerstin – niedrig (CC0)",
+     "seconds": 9.9
+    },
+    {
+     "file": "eva_k-x_low.mp3",
+     "label": "Eva K – sehr klein",
+     "seconds": 12.9
+    },
+    {
+     "file": "ramona-low.mp3",
+     "label": "Ramona – niedrig",
+     "seconds": 9.9
+    },
+    {
+     "file": "pavoque-low.mp3",
+     "label": "Pavoque – niedrig",
+     "seconds": 11.4
+    },
+    {
+     "file": "karlsson-low.mp3",
+     "label": "Karlsson – niedrig",
+     "seconds": 10.2
+    },
+    {
+     "file": "thorsten-emotional-neutral.mp3",
+     "label": "Thorsten emotional – neutral (CC0)",
+     "seconds": 8.8
+    },
+    {
+     "file": "thorsten-emotional-amused.mp3",
+     "label": "Thorsten emotional – amüsiert (CC0)",
+     "seconds": 8.9
+    },
+    {
+     "file": "thorsten-emotional-surprised.mp3",
+     "label": "Thorsten emotional – überrascht (CC0)",
+     "seconds": 9.9
+    },
+    {
+     "file": "mls-speaker-3.mp3",
+     "label": "MLS – Sprecher*in 3",
+     "seconds": 18.5
+    },
+    {
+     "file": "mls-speaker-42.mp3",
+     "label": "MLS – Sprecher*in 42",
+     "seconds": 24.1
+    },
+    {
+     "file": "mls-speaker-120.mp3",
+     "label": "MLS – Sprecher*in 120",
+     "seconds": 18.2
+    }
+   ]
   }
  ]
 }

@@ -8,7 +8,7 @@
   import { GERMAN_VOICES, PiperVoice, cachedVoices, clearVoiceCache, type SynthResult } from '../lib/piper';
 
   interface Sample { file: string; label: string; seconds: number }
-  let samples = $state<{ text: string; note: string; samples: Sample[] } | null>(null);
+  let samples = $state<{ groups: { title: string; note: string; samples: Sample[] }[] } | null>(null);
 
   const PRESETS = [
     'der Hund',
@@ -148,22 +148,25 @@
     <section>
       <h2>1. Hörproben</h2>
       {#if samples}
-        <p class="help">Text: «{samples.text}»<br />{samples.note}</p>
-        <ul class="samples">
-          {#each samples.samples as s}
-            <li>
-              <span>{s.label}</span>
-              <audio controls preload="none" src={asset(`tts-lab/samples/${s.file}`)}></audio>
-            </li>
-          {/each}
-        </ul>
+        {#each samples.groups as g}
+          <h3>{g.title}</h3>
+          <p class="help">{g.note}</p>
+          <ul class="samples">
+            {#each g.samples as s}
+              <li>
+                <span>{s.label}</span>
+                <audio controls preload="none" src={asset(`tts-lab/samples/${s.file}`)}></audio>
+              </li>
+            {/each}
+          </ul>
+        {/each}
       {:else}
         <p class="help">Hörproben werden geladen …</p>
       {/if}
     </section>
 
     <section>
-      <h2>2. Live auf diesem Gerät erzeugen</h2>
+      <h2>2. Piper live auf diesem Gerät erzeugen</h2>
       <p class="help">
         Testet, ob dieses Gerät die Stimme selbst erzeugen kann und wie schnell. Beim ersten Mal werden ca. 30 MB
         Programm und {info.sizeMB} MB Stimme geladen (am besten im WLAN).
@@ -217,7 +220,7 @@
     <section>
       <h2>Lizenzen</h2>
       <p class="help">
-        Thorsten und Kerstin: Trainingsdaten CC0 (frei verwendbar). Piper: MIT. espeak-ng (Laute): GPL-3.0. ONNX
+        Qwen3-TTS: Apache 2.0. Thorsten und Kerstin: Trainingsdaten CC0 (frei verwendbar). Piper: MIT. espeak-ng (Laute): GPL-3.0. ONNX
         Runtime: MIT. Andere Stimmen: Lizenz vor einer Verwendung prüfen.
       </p>
     </section>
@@ -227,6 +230,7 @@
 <style>
   .lab { min-height: 100%; }
   .bar a { text-decoration: none; }
+  h3 { font-size: 1rem; margin: 1.25rem 0 0.25rem; }
   .samples { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
   .samples li { display: flex; flex-direction: column; gap: 0.25rem; background: var(--card); padding: 0.6rem 0.8rem; border-radius: 12px; }
   .samples audio { width: 100%; }
